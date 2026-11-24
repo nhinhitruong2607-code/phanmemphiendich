@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phiên Dịch Tiếng Tày - Việt - Anh</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background-color: #F4EFE6; /* Màu kem giấy dó */
+      color: #2C1E16; /* Màu nâu gỗ trầm */
+      background-image: radial-gradient(#D8CCB8 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .font-serif-vn { font-family: 'Noto Serif', serif; }
+    
+    /* Họa tiết thổ cẩm Tày tối giản bằng SVG Data URI */
+    .tho-cam-border {
+      height: 12px;
+      background-color: #1D3557; /* Xanh chàm đặc trưng */
+      background-image: url("data:image/svg+xml,%3Csvg width='24' height='12' viewBox='0 0 24 12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 1L17 6L12 11L7 6Z' fill='none' stroke='%23D4A373' stroke-width='1.5'/%3E%3Ccircle cx='12' cy='6' r='1.5' fill='%23E63946'/%3E%3Cpath d='M0 6H5M19 6H24' stroke='%23F4EFE6' stroke-width='1'/%3E%3C/svg%3E");
+      background-repeat: repeat-x;
+    }
+    .paper-card {
+      background-color: #FAF7F2;
+      border: 1px solid #C8B69E;
+      box-shadow: 0 4px 20px -2px rgba(44, 30, 22, 0.08);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- Viền thổ cẩm trên cùng -->
+  <div class="tho-cam-border w-full"></div>
+
+  <main class="max-w-4xl w-full mx-auto px-4 py-8 flex-grow">
+    <!-- Tiêu đề trang trọng -->
+    <header class="text-center mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1D3557]/10 text-[#1D3557] text-xs font-semibold tracking-wider uppercase mb-2">
+        <span>✦ Di sản văn hóa Việt Bắc ✦</span>
+      </div>
+      <h1 class="font-serif-vn text-3xl md:text-4xl font-bold text-[#3E2723] tracking-tight">
+        Từ Điển & Phiên Dịch Tiếng Tày
+      </h1>
+      <p class="text-sm md:text-base text-[#6D5645] mt-2 font-serif-vn italic">
+        Kết nối thanh âm đại ngàn — Chuyển ngữ Tày sang Tiếng Việt & Tiếng Anh
+      </p>
+    </header>
+
+    <!-- Khung làm việc chính -->
+    <div class="paper-card rounded-2xl p-5 md:p-7 mb-6">
+      <!-- Câu mẫu gợi ý nhanh -->
+      <div class="mb-4">
+        <span class="text-xs font-semibold uppercase tracking-wider text-[#8C6D53] block mb-2">Câu giao tiếp thông dụng (Bấm để thử):</span>
+        <div id="samples" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <!-- Ô nhập văn bản tiếng Tày -->
+      <div class="relative">
+        <textarea id="tayInput" rows="3"
+          <!-- Từ điển mini tích hợp sẵn -->
+    <section class="paper-card rounded-2xl p-5 md:p-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <h2 class="font-serif-vn text-xl font-bold text-[#3E2723]">Sổ Tay Từ Vựng Cơ Bản</h2>
+        <input id="dictSearch" type="text" oninput="renderDict()" placeholder="Tìm nhanh từ Tày hoặc Việt..." 
+          class="px-3 py-1.5 text-sm rounded-lg bg-[#F4EFE6] border border-[#C8B69E] focus:border-[#1D3557] outline-none">
+      </div>
+      <div id="dictGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 max-h-60 overflow-y-auto pr-1"></div>
+    </section>
+  </main>
+
+  <footer class="text-center py-4 text-xs text-[#6D5645]">
+    Gìn giữ và lan tỏa tiếng nói dân tộc Tày • Thiết kế mộc mạc truyền thống
+  </footer>
+  <div class="tho-cam-border w-full"></div>
+
+  <script>
+    // Dữ liệu mẫu & Từ điển cơ bản tích hợp sẵn (hoạt động tức thì)
+    const SAMPLES = [
+      { tay: "Pây tàng slương!", vi: "Đi đường bình an / thượng lộ bình an!", en: "Have a safe trip!", note: "Lời chúc truyền thống ấm áp của người Tày khi tiễn khách hoặc người thân đi xa." },
+      { tay: "Cảm ơn slư lai!", vi: "Cảm ơn rất nhiều!", en: "Thank you very much!", note: "'Slư lai' biểu thị mức độ nhiều, chân thành trong giao tiếp." },
+      { tay: "Pỉ noọng kin khẩu dằng?", vi: "Anh em/bà con đã ăn cơm chưa?", en: "Have you eaten yet?", note: "'Pỉ noọng' (anh em) là cách xưng hô thân mật, coi nhau như người một nhà của người Tày." },
+      { tay: "Bản noọng mì lai mác cọ.", vi: "Bản của em có rất nhiều quả cọ.", en: "My village has many palm fruits.", note: "Cây cọ gắn liền với đời sống, ẩm thực và nếp nhà sàn vùng trung du miền núi phía Bắc." }
+    ];
+
+    const MINI_DICT = [
+      { tay: "Kin khẩu", vi: "Ăn cơm", en: "Eat rice / Have a meal" },
+      { tay: "Pỉ noọng", vi: "Anh em, họ hàng", en: "Siblings / Relatives" },
+      { tay: "Pây tàng", vi: "Đi đường", en: "Travel / Go on the road" },
+      { tay: "Slương", vi: "Thương, yêu, bình an", en: "Love / Peace / Safe" },
+      { tay: "Bản", vi: "Làng, bản", en: "Village / Hamlet" },
+      { tay: "Rườn", vi: "Nhà (nhà sàn)", en: "House (Stilt house)" },
+      { tay: "Nặm", vi: "Nước", en: "Water" },
+      { tay: "Phja / Phya", vi: "Núi", en: "Mountain" },
+      { tay: "Mác", vi: "Quả, trái cây", en: "Fruit" },
+      { tay: "Tàng", vi: "Con đường", en: "Road / Path" },
+      { tay: "Đảy", vi: "Được, tốt", en: "Good / Okay / Can" },
+      { tay: "Bấu", vi: "Không", en: "No / Not" }
+    ];
+
+    // Khởi tạo giao diện ban đầu
+    function init() {
+      const sampleContainer = document.getElementById('samples');
+          SAMPLES.forEach(item => {
+        const btn = document.createElement('button');
+        btn.className = "text-xs px-3 py-1.5 rounded-lg bg-[#EFE9DC] hover:bg-[#1D3557] hover:text-white border border-[#D5C9AE] text-[#3E2723] transition cursor-pointer";
+        btn.textContent = item.tay;
+        btn.onclick = () => {
+          document.getElementById('tayInput').value = item.tay;
+          showResult(item.vi, item.en, item.note);
+        };
+        sampleContainer.appendChild(btn);
+      });
+      renderDict();
+    }
+
+    // Hiển thị danh sách từ điển mini
+    function renderDict() {
+      const query = document.getElementById('dictSearch').value.toLowerCase().trim();
+      const grid = document.getElementById('dictGrid');
+      grid.innerHTML = '';
+
+      MINI_DICT.filter(d => d.tay.toLowerCase().includes(query) || d.vi.toLowerCase().includes(query))
+        .forEach(d => {
+          const card = document.createElement('div');
+          card.className = "p-2.5 rounded-xl bg-[#F4EFE6] border border-[#E2D8C8] hover:border-[#1D3557] cursor-pointer transition";
+          card.onclick = () => {
+            document.getElementById('tayInput').value = d.tay;
+            showResult(d.vi, d.en, "Từ vựng thông dụng trong giao tiếp hàng ngày của đồng bào Tày.");
+          };
+          card.innerHTML = `
+            <div class="font-serif-vn font-bold text-[#1D3557] text-sm">${d.tay}</div>
+            <div class="text-xs text-[#2C1E16] font-medium">${d.vi}</div>
+            <div class="text-[11px] text-[#7A6552] italic">${d.en}</div>
+          `;
+          grid.appendChild(card);
+        });
+    }
+
+    // Gọi Gemini API với Exponential Backoff
+          async function callGeminiWithRetry(promptText) {
+      const apiKey = ""; 
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+      
+      const payload = {
+        contents: [{ parts: [{ text: `Dịch câu/từ tiếng Tày sau sang Tiếng Việt và Tiếng Anh tự nhiên, chính xác: "${promptText}"` }] }],
+        systemInstruction: {
+          parts: [{ text: "Bạn là chuyên gia ngôn ngữ và văn hóa dân tộc Tày (Việt Nam). Hãy dịch chính xác văn bản tiếng Tày sang tiếng Việt và tiếng Anh, kèm giải thích ngắn gọn (1-2 câu) về sắc thái hoặc văn hóa nếu có." }]
+        },
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: "OBJECT",
+            properties: {
+              vietnamese: { type: "STRING" },
+              english: { type: "STRING" },
+              culturalNote: { type: "STRING" }
+            },
+            required: ["vietnamese", "english", "culturalNote"]
+          }
+        }
+      };
+
+      let delay = 1000;
+      for (let attempt = 0; attempt < 4; attempt++) {
+        try {
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const data = await response.json();
+          const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (!rawText) throw new Error("Empty response");
+          return JSON.parse(rawText);
+        } catch (err) {
+          if (attempt === 3) throw err;
+          await new Promise(res => setTimeout(res, delay));
+          delay *= 2;
+        }
+      }
+    }
+          // Xử lý dịch văn bản
+    async function translateTay() {
+      const input = document.getElementById('tayInput').value.trim();
+      if (!input) {
+        showStatus("Vui lòng nhập từ hoặc câu tiếng Tày cần dịch.", "warn");
+        return;
+      }
+
+      // Kiểm tra nhanh trong dữ liệu có sẵn trước
+      const exactSample = SAMPLES.find(s => s.tay.toLowerCase() === input.toLowerCase());
+      if (exactSample) {
+        showResult(exactSample.vi, exactSample.en, exactSample.note);
+        return;
+      }
+
+      const btn = document.getElementById('translateBtn');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="animate-pulse">Đang luận giải...</span>`;
+      hideStatus();
+
+      try {
+        const res = await callGeminiWithRetry(input);
+        showResult(res.vietnamese, res.english, res.culturalNote);
+      } catch (error) {
+        // Fallback nếu không kết nối được API: tìm kiếm gần đúng trong từ điển mini
+        const fallback = MINI_DICT.find(d => d.tay.toLowerCase() === input.toLowerCase());
+        if (fallback) {
+          showResult(fallback.vi, fallback.en, "Tra cứu từ sổ tay từ vựng cơ bản.");
+        } else {
+          showStatus("Không thể kết nối dịch vụ AI lúc này. Vui lòng thử lại sau hoặc chọn từ trong sổ tay.", "error");
+        }
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>Dịch Ngay</span><span class="text-xs opacity-80">➔</span>`;
+      }
+    }
+          function showResult(vi, en, note) {
+      hideStatus();
+      document.getElementById('viResult').textContent = vi;
+      document.getElementById('enResult').textContent = en;
+      document.getElementById('noteResult').textContent = note || "Không có ghi chú thêm.";
+      document.getElementById('resultArea').classList.remove('hidden');
+    }
+
+    function clearAll() {
+      document.getElementById('tayInput').value = '';
+      document.getElementById('resultArea').classList.add('hidden');
+      hideStatus();
+    }
+
+    function copyText(elementId) {
+      const text = document.getElementById(elementId).textContent;
+      const temp = document.createElement('textarea');
+      temp.value = text;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+      showStatus("Đã sao chép bản dịch vào bộ nhớ tạm!", "info");
+      setTimeout(hideStatus, 2000);
+    }
+
+    function showStatus(msg, type) {
+      const box = document.getElementById('statusBox');
+      box.textContent = msg;
+      box.className = `mt-4 p-3 rounded-xl text-sm text-center ${
+        type === 'error' ? 'bg-red-100 text-red-800 border border-red-300' : 
+        type === 'warn' ? 'bg-amber-100 text-amber-900 border border-amber-300' : 
+        'bg-[#1D3557]/10 text-[#1D3557] border border-[#1D3557]/20'
+      }`;
+      box.classList.remove('hidden');
+    }
+
+    function hideStatus() {
+      document.getElementById('statusBox').classList.add('hidden');
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>
+          
+          
+          
